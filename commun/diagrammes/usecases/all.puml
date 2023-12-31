@@ -1,0 +1,41 @@
+@startuml diagramme de cas d'utilisation
+actor user as "Utilisateur"
+actor conUser as "Utilisateur connecté"
+
+
+package "Gestion de Compte" {
+    usecase connexion as "Se connecter"
+    usecase creaCompte as "Créer un compte"
+    usecase modifCompte as "Modifier son compte"
+    usecase deconnexion as "Se déconnecter"
+    usecase recupMdp as "Récupérer son mot de passe"
+    usecase verifEmail as "Vérifier son email"
+    user -- connexion
+    user -- creaCompte
+    user -- recupMdp
+    conUser -- deconnexion
+    conUser -- modifCompte
+}
+
+package "Gestion de Document" {
+    usecase creaDoc as "Créer un document vide"
+    usecase ouverDoc as "Ouvrir un document sauvegardé"
+    usecase sauveDoc as "Sauvegarder un document"
+    usecase dupliDoc as "Dupliquer un document"
+    usecase supprDoc as "Supprimer un document"
+    usecase partageDoc as "Partager un document"
+    usecase gestPerm as "Gerer les permissions d'un document"
+    usecase ajoutFeuilleDoc as "Ajouter une feuille à un document"
+    usecase supprFeuilleDoc as "Supprimer une feuille d'un document"
+    usecase modifFeuilleDoc as "Modifier une feuille d'un document"
+    usecase modifCellFeuilleDoc as "Modifier une cellule d'une feuille d'un document"
+    usecase ajoutLigneFeuilleDoc as "Ajouter des lignes à une feuille d'un document"
+    usecase affichFeuilleDoc as "Afficher une feuille d'un document"
+    usecase rechDoc as "Rechercher un document"
+    usecase histModif as "Afficher l'historique des modifications d'un document"
+    usecase restVersion as "Restaurer une version d'un document"
+    usecase copierColler as "Copier/Coller des cellules"
+    usecase glisserDeplacer as "Glisser-Déposer des cellules"
+}
+
+@enduml

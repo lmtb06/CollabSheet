@@ -1,0 +1,133 @@
+@startuml diagramme de classe principale
+skinparam linetype ortho
+
+namespace compte {
+    class Compte {
+        id : int
+        nom : string
+        prenom : string
+        email : string
+        motDePasse : string
+        avatar : string
+        emailVerifié : boolean = false
+        dateDeCreation : DateTime
+        dateDeModification : DateTime
+        + Compte(string nom, string prenom, string email, string motDePasse)
+        + getNom() : string
+        + setNom(string nom)
+        + getPrenom() : string
+        + setPrenom(string prenom)
+        + getEmail() : string
+        + setEmail(string email)
+        + getMotDePasse() : string
+        + setMotDePasse(string motDePasse)
+        + getAvatar() : string
+        + setAvatar(string avatar)
+        + isEmailVerifié() : boolean
+        + setEmailVerifié(boolean emailVerifié)
+        + getDateDeCreation() : DateTime
+        + getDateDeModification() : DateTime
+    }
+}
+
+namespace document {
+    enum NiveauPermission {
+        LECTURE
+        ECRITURE
+        ADMIN
+    }
+
+    class Permission {
+        id : int
+        permission : NiveauPermission
+        + Permission(NiveauPermission permission, Compte compte, Document document)
+        + getPermission() : NiveauPermission
+        + setPermission(NiveauPermission permission)
+        + getCompte() : Compte
+        + setCompte(Compte compte)
+        + getDocument() : Document
+        + setDocument(Document document)
+    }
+
+    class Cellule {
+        id : int
+        contenu : String
+        + Cellule(string contenu)
+        + getContenu() : string
+        + setContenu(string contenu)
+    }
+
+    class Feuille {
+        id : int
+        nomFeuille : string
+        Cellule[][] : cellules
+        + Feuille(string nomFeuille, Cellule[][] cellules)
+        + setCellule(Cellule cellule, int row, int col)
+        + getCellule(int row, int col) : Cellule
+        + removeCellule(int row, int col)
+        + getNomFeuille() : string
+        + setNomFeuille(string nomFeuille)
+        + getNbLignes() : int
+        + getNbColonnes() : int
+    }
+    Feuille "1" -- "1..*" Cellule : contient
+
+    class Document {
+        id : int
+        titre : string = "Sans titre"
+        dateDeCreation : DateTime
+        dateDeModification : DateTime
+        + Document(string titre)
+        + getTitre() : string
+        + setTitre(string titre)
+        + addFeuille(Feuille feuille)
+        + removeFeuille(Feuille feuille)
+        + getFeuille(int index) : Feuille
+        + getNbFeuilles() : int
+        + getDateDeCreation() : DateTime
+        + getDateDeModification() : DateTime
+    }
+    Document "*" -- "*" Compte
+    (Document,Compte) .. Permission
+    Document "*" -- "1" Compte : propriétaire >
+    Document -- "1..*" Feuille : contient
+    Document "1" -- "1" HistoriqueCommande : contient
+}
+
+
+namespace commande {
+    abstract Commande {
+        effectuee : boolean
+        + Commande(Compte compte, Document document, boolean effectuee)
+        + executer()
+        + annuler()
+    }
+
+    Commande -- "1" Compte : compte à l'origine de la commande
+    Commande -- "1" Document : document sur lequel la commande est effectuée
+
+    class HistoriqueCommande {
+        indexCourant : int
+        commandes : Commande[]
+        + HistoriqueCommande()
+        + HistoriqueCommande(Commande[] commandes, int indexCourant)
+        + ajouterCommande(Commande commande, int index)
+        + ajouterCommande(Commande commande)
+        + enleverCommande(int index)
+        + undo()
+        + redo()
+    }
+    HistoriqueCommande -- "*" Commande
+
+    class ModificationCellule extends Commande {
+        numeroFeuille : int
+        ligne : int
+        colonne : int
+        ancienneValeur : String
+        nouvelleValeur : String
+        + ModificationCellule(Compte compte, Document document, int numeroFeuille, int ligne, int colonne, String ancienneValeur, String nouvelleValeur)
+        + executer()
+        + annuler()
+    }
+}
+@enduml

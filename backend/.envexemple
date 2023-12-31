@@ -1,0 +1,8 @@
+JWT_SECRET=VotreCleSecreteIci
+MONGO_SCHEME=mongodb+srv pour atlas ou mongodb pour local
+MONGO_URI= l'uri de votre base de donnée
+MONGO_USER= votre utilisateur de la base de donnée
+MONGO_DATABASE=CollabSheet
+MONGO_PASSWORD= votre mot de passe de la base de donnée
+MONGO_PORT= votre port de la base de donnée en local
+PORT= port de votre serveur
